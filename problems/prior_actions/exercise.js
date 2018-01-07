@@ -18,15 +18,20 @@ exercise = comparestdout(exercise)
  * (note that this is quite different from the "normal" workshopper-exercise).
  * The seneca log is set to "quiet" to have a clean comparation of stdouts.
  */
-exercise.addSetup(function (mode, callback) {
+exercise.addSetup(function(mode, callback) {
   this.solutionArgs = [this.solution, '--seneca.log.quiet']
-  this.submissionArgs = [process.cwd() + '/' + this.submission, '--seneca.log.quiet'] 
+  this.submissionArgs = [
+    process.cwd() + '/' + this.submission,
+    '--seneca.log.quiet'
+  ]
   this.solution = __dirname + '/seneca-prior-actions-executor.js'
   this.submission = __dirname + '/seneca-prior-actions-executor.js'
   callback(null)
 })
 
 // cleanup for both run and verify
-exercise.addCleanup(function (mode, passed, callback) { /* Do nothing */ })
+exercise.addCleanup(function() {
+  /* Do nothing */
+})
 
 module.exports = exercise

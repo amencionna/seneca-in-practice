@@ -1,10 +1,10 @@
-module.exports = function math (options) {
+module.exports = function math () {
   this.add({role: 'math', cmd: 'sum'}, function (msg, respond) {
     var operation = this.make$('operation')
     operation.cmd = 'sum'
     operation.left = msg.left
     operation.right = msg.right
-    operation.save$(function (err, operation) {
+    operation.save$(function (err) {
       if (err) {
         return respond(err)
       }
@@ -17,7 +17,7 @@ module.exports = function math (options) {
     operation.cmd = 'product'
     operation.left = msg.left
     operation.right = msg.right
-    operation.save$((err, operation) => {
+    operation.save$((err) => {
       if (err) {
         return respond(err)
       }

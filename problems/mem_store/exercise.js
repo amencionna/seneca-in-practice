@@ -19,7 +19,7 @@ exercise = comparestdout(exercise)
  * (note that this is quite different from the "normal" workshopper-exercise).
  * The seneca log is set to "quiet" to have a clean comparation of stdouts.
  */
-exercise.addSetup(function (mode, callback) {
+exercise.addSetup(function(mode, callback) {
   const submissionFilePath = path.join(process.cwd(), this.submission)
 
   this.solutionArgs = [this.solution]
@@ -30,7 +30,7 @@ exercise.addSetup(function (mode, callback) {
 })
 
 // cleanup for both run and verify
-exercise.addCleanup(function (mode, passed, callback) {
+exercise.addCleanup(function() {
   // Do nothing
 })
 

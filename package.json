@@ -32,12 +32,15 @@
     "eslint": "3.4.0",
     "eslint-config-standard": "6.0.0",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "lab": "^15.1.2",
+    "prettier": "^1.9.2"
   },
   "scripts": {
     "start": "node runners",
-    "test": "echo \"No test specified\"",
-    "lint": "eslint **/*.js"
+    "test": "lab -dL credits.js",
+    "lint": "eslint **/*.js",
+    "prettier": "prettier --write --no-semi --single-quote *.js problems/*.js "
   },
   "keywords": [
     "seneca.js",

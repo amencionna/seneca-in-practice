@@ -5,11 +5,13 @@ const fs = require('fs')
 const path = require('path')
 const async = require('async')
 const _ = require('lodash')
-const {getRandomInt} = require('../utils')
+const { getRandomInt } = require('../utils')
 let exercise = require('workshopper-exercise')()
 
 // cleanup for both run and verify
-exercise.addCleanup((mode, passed, callback) => { /* Do nothing */ })
+exercise.addCleanup(() => {
+  /* Do nothing */
+})
 
 // checks that the submission file actually exists
 exercise = filecheck(exercise)
@@ -20,7 +22,7 @@ let a, b
 /**
  * If mode === run, get the params from args
  */
-exercise.addSetup(function (mode, cb) {
+exercise.addSetup(function(mode, cb) {
   a = getRandomInt(0, 100)
   b = getRandomInt(0, 100)
   this.solutionModule = require(getSolutionPath() + 'solution.js')
@@ -31,58 +33,79 @@ exercise.addSetup(function (mode, cb) {
 /**
  * Processor
  */
-exercise.addProcessor(function (mode, callback) {
+exercise.addProcessor(function(mode, callback) {
   let solutionResult, submissionResult
   const that = this
   let pass = true
   var seneca = require('seneca')()
-  async.series([
-    cb => {
-      return seneca.use(that.submissionModule).act({role: 'math', cmd: 'product', left: a, right: b}, cb)
-    },
-    cb => {
-      if (mode === 'verify') {
-        return seneca.use(that.solutionModule).act({role: 'math', cmd: 'product', left: a, right: b}, cb)
+  async.series(
+    [
+      cb => {
+        return seneca
+          .use(that.submissionModule)
+          .act({ role: 'math', cmd: 'product', left: a, right: b }, cb)
+      },
+      cb => {
+        if (mode === 'verify') {
+          return seneca
+            .use(that.solutionModule)
+            .act({ role: 'math', cmd: 'product', left: a, right: b }, cb)
+        }
+        cb()
       }
-      cb()
-    }
-  ], (err, results) => {
-    submissionResult = results[0]
-    if (mode === 'run') {
-      console.log(`Execution with left: ${a}, right: ${b} returned: ${JSON.stringify(submissionResult)}`)
-    } else {
-      solutionResult = results[1]
-      if (!_.isEqual(solutionResult, submissionResult)) {
-        exercise.emit('fail', `Expected result: ${JSON.stringify(solutionResult)}` +
-                              `, Actual result: ${JSON.stringify(submissionResult)}`)
-        pass = false
+    ],
+    (err, results) => {
+      submissionResult = results[0]
+      if (mode === 'run') {
+        console.log(
+          `Execution with left: ${a}, right: ${b} returned: ${JSON.stringify(
+            submissionResult
+          )}`
+        )
       } else {
-        exercise.emit('success', `Expected result: ${JSON.stringify(solutionResult)} ` +
-                              `Actual result: ${JSON.stringify(submissionResult)}`)
-        pass = true
+        solutionResult = results[1]
+        if (!_.isEqual(solutionResult, submissionResult)) {
+          exercise.emit(
+            'fail',
+            `Expected result: ${JSON.stringify(solutionResult)}` +
+              `, Actual result: ${JSON.stringify(submissionResult)}`
+          )
+          pass = false
+        } else {
+          exercise.emit(
+            'success',
+            `Expected result: ${JSON.stringify(solutionResult)} ` +
+              `Actual result: ${JSON.stringify(submissionResult)}`
+          )
+          pass = true
+        }
+        return callback(err, pass)
       }
-      return callback(err, pass)
     }
-  })
+  )
 })
 
 // Print out the suggested solution when the student passes. This is copied from
 // workshopper-exercise/execute because the rest of execute is not relevant to
 // the way this is tested.
-exercise.getSolutionFiles = function (callback) {
+exercise.getSolutionFiles = function(callback) {
   var solutionDir = getSolutionPath()
-  fs.readdir(solutionDir, function (err, list) {
+  fs.readdir(solutionDir, function(err, list) {
     if (err) {
       return callback(err)
     }
     list = list
-        .filter(function (f) { return (/\.js$/).test(f) })
-        .map(function (f) { return path.join(solutionDir, f) })
+      .filter(function(f) {
+        return /\.js$/.test(f)
+      })
+      .map(function(f) {
+        return path.join(solutionDir, f)
+      })
     callback(null, list)
   })
 }
 
-function getSolutionPath () {
+function getSolutionPath() {
   return path.join(exercise.dir, './solution/')
 }
 

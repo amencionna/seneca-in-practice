@@ -6,7 +6,7 @@ var credits = require('./credits')
 var hooray = require('workshopper-hooray')
 var more = require('workshopper-more')
 
-var fpath = function (f) {
+var fpath = function(f) {
   return path.join(__dirname, f)
 }
 
@@ -21,15 +21,18 @@ workshopper({
     bg: 'red'
   },
   helpFile: path.join(__dirname, 'help.txt'),
-  commands: [{
-    name: 'credits',
-    handler: credits
-  }, {
-    name: 'more',
-    menu: false,
-    short: 'm',
-    handler: more
-  }],
+  commands: [
+    {
+      name: 'credits',
+      handler: credits
+    },
+    {
+      name: 'more',
+      menu: false,
+      short: 'm',
+      handler: more
+    }
+  ],
   onComplete: hooray
 })
 

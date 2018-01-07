@@ -2,11 +2,13 @@ let exercise = require('workshopper-exercise')()
 const filecheck = require('workshopper-exercise/filecheck')
 const execute = require('workshopper-exercise/execute')
 const comparestdout = require('../comparestdout-filterlogs')
-const {getRandomFloat} = require('../utils')
+const { getRandomFloat } = require('../utils')
 const path = require('path')
 
 // cleanup for both run and verify
-exercise.addCleanup(function (mode, passed, callback) { /* Do nothing */ })
+exercise.addCleanup(function() {
+  /* Do nothing */
+})
 
 // checks that the submission file actually exists
 exercise = filecheck(exercise)
@@ -14,17 +16,19 @@ exercise = filecheck(exercise)
 // execute the solution and submission in parallel with spawn()
 exercise = execute(exercise)
 
-exercise.addSetup(function (mode, callback) {
+exercise.addSetup(function(mode, callback) {
   let a, b
   const submissionFilePath = path.join(process.cwd(), this.submission)
 
-   // Test arguments to be summed
+  // Test arguments to be summed
   if (mode === 'run') {
     // run
     if (process.argv.length < 6) {
       a = getRandomFloat()
       b = getRandomFloat()
-      console.log(`Two arguments must be provided, generating random: ${a}, ${b}`)
+      console.log(
+        `Two arguments must be provided, generating random: ${a}, ${b}`
+      )
     } else {
       a = process.argv[4]
       b = process.argv[5]

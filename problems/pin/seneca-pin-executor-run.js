@@ -10,7 +10,15 @@ var seneca = require('seneca')()
 // Temporary, see: https://github.com/senecajs/seneca/issues/566
 process.removeAllListeners('warning')
 
-seneca.use(mod).act({role: 'math', cmd: process.argv[3], left: process.argv[4], right: process.argv[5]}, function (err, result) {
-  if (err) return console.error(err)
-  console.log(result)
-})
+seneca.use(mod).act(
+  {
+    role: 'math',
+    cmd: process.argv[3],
+    left: process.argv[4],
+    right: process.argv[5]
+  },
+  function(err, result) {
+    if (err) return console.error(err)
+    console.log(result)
+  }
+)
